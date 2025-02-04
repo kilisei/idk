@@ -11,8 +11,31 @@ templ Index(tiles []database.Tile) {
 			<button @click="open = !open">
 				open
 			</button>
-			<div x-show="open" class="fixed border p-2 rounded-md max-w-[80ch] w-full h-2/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-				CONTENT
+			<div x-cloak x-show="open">
+				<div class="inset-0 fixed bg-black/80 w-dvh h-dvh" @click="open = false"></div>
+				<div x-trap="open" class="fixed border p-2 rounded-md max-w-[80ch] flex gap-2 flex-col w-full h-2/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+					<button class="fixed top-2 right-2" @click="open = false">
+						<i data-lucide="x"></i>
+					</button>
+					<div>
+						<span class="text-lg font-bold">Create tile</span>
+						<p class="text-sm text-gray-400">Descritp oa na adsf asd kjaskd </p>
+					</div>
+					<form x-init class="flex-col flex justify-between grow">
+						<div class="flex flex-col gap-1">
+							<label for="tile-title">Title</label>
+							<input id="tile-title" class="bg-black border px-2 h-8 rounded-md" type="text" name="title" placeholder="https://Wikipedia.org"/>
+						</div>
+						<div class="flex gap-2 justify-end">
+							<button type="button" @click="open = false">
+								Cancel
+							</button>
+							<button type="submit">
+								Submit
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 		<div class="h-full w-full grid place-content-center">
