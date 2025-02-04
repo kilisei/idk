@@ -1,15 +1,16 @@
 package server
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"net/http"
 	"nproxy/cmd/web"
+	views "nproxy/cmd/web/views"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
 	e := echo.New()
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
@@ -21,19 +22,30 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	fileServer := http.FileServer(http.FS(web.Files))
-	e.GET("/assets/*", echo.WrapHandler(fileServer))
-
-	e.GET("/", s.HelloWorldHandler)
+	s.RegisterApiRoutes(e)
+	s.RegisterWebRoutes(e)
 
 	return e
 }
 
-func (s *Server) HelloWorldHandler(c echo.Context) error {
-	data, err := s.queries.GetAuthor(s.ctx, 1)
+func (s *Server) RegisterApiRoutes(e *echo.Echo) http.Handler {
+	return e
+}
+
+func (s Server) HandleIndex(c echo.Context) error {
+	tiles, err := s.queries.GetAllTiles(s.ctx)
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, data)
+	return views.Index(tiles).Render(c.Request().Context(), c.Response())
+}
+
+func (s *Server) RegisterWebRoutes(e *echo.Echo) http.Handler {
+	fileServer := http.FileServer(http.FS(web.Files))
+	e.GET("/assets/*", echo.WrapHandler(fileServer))
+
+	e.GET("/", s.HandleIndex)
+
+	return e
 }

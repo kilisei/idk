@@ -8,8 +8,10 @@ import (
 	"database/sql"
 )
 
-type Author struct {
-	ID   int64
-	Name string
-	Bio  sql.NullString
+type Tile struct {
+	ID    string
+	Title string
+	Type  string
+	Link  sql.NullString
+	Image sql.NullString
 }

@@ -23,6 +23,9 @@ tailwind-install:
 
 build: tailwind-install templ-install
 	@echo "Building..."
+	@templ fmt .
+	@go fmt -n ./...
+	@sqlc generate
 	@templ generate
 	@./tailwindcss -i cmd/web/styles/input.css -o cmd/web/assets/css/output.css
 	@go build -o main cmd/api/main.go
@@ -57,5 +60,12 @@ watch:
                 exit 1; \
             fi; \
         fi
+
+migration:
+	@if [ -z "$(name)" ]; then \
+		echo "Error: Migration name required. Use 'make create-migration name=your_migration_name'"; \
+		exit 1; \
+	fi
+	goose create $(name) sql
 
 .PHONY: all build run test clean watch tailwind-install templ-install

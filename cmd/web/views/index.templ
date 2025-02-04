@@ -1,0 +1,28 @@
+package web
+
+import (
+	"nproxy/cmd/web/layouts"
+	database "nproxy/internal/database/generated"
+)
+
+templ Index(tiles []database.Tile) {
+	@layouts.Base() {
+		<div x-data="{ open: false }">
+			<button @click="open = !open">
+				open
+			</button>
+			<div x-show="open" class="fixed border p-2 rounded-md max-w-[80ch] w-full h-2/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+				CONTENT
+			</div>
+		</div>
+		<div class="h-full w-full grid place-content-center">
+			<div class="flex flex-wrap gap-2 items-center justify-center">
+				for _, tile := range tiles {
+					<div class="p-2 size-32 rounded-md border bg-black aspect-square grid place-content-center">
+						{ tile.Title }
+					</div>
+				}
+			</div>
+		</div>
+	}
+}

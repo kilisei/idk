@@ -27,8 +27,6 @@ type Server struct {
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 
-	ctx := context.Background()
-
 	db, err := sql.Open("sqlite", "sqlite3.db")
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +37,7 @@ func NewServer() *http.Server {
 	NewServer := &Server{
 		port:    port,
 		queries: database.New(db),
-		ctx:     ctx,
+		ctx:     context.Background(),
 	}
 
 	server := &http.Server{

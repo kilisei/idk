@@ -1,9 +1,9 @@
 version: "2"
 sql:
   - engine: "sqlite"
-    queries: "./internal/database/queries"
-    schema: "./internal/database/migrator/migrations"
+    queries: "internal/database/queries"
+    schema: "internal/database/migrator/migrations"
     gen:
       go:
         package: "database"
-        out: "./internal/database/generated"
+        out: "internal/database/generated"
